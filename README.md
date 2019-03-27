@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This code displays animated GIFs on a 64x16 RGB LED display. 
 It was used to operate an LED Top Hat: https://imgur.com/gallery/6iKDv 
 
@@ -32,3 +33,6 @@ knight.gif
 matrix.gif
 pong1.gif
 rain.gif
+=======
+# ochsner-matrix-teensy
+>>>>>>> df719fd8977b8c25d5a147b271d6d3f4ff00fb1a
