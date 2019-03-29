@@ -10,6 +10,21 @@
 // The filenames for the animation associated with each state
 const char* files[3]={"ACTIVE.GIF", "PRES.GIF", "IDLE.GIF"};
 
+// Animation Speed: range 1-10
+// Do not modify the MIN and MAX
+const int defaultSpeed = 5; 
+const int minSpeed = 1;
+const int maxSpeed = 10; 
+
+// Brightness: range 0-255
+// Do not modify the MIN and MAX
+const int defaultBrightness = 50;             // Initial Brightness at power-up
+const int minBrightness = 10;                 // Minimum brightness value for use with brightness buttons
+const int maxBrightness = 200;                // Maximum brightness value for use with brightness buttons
+
+const rgb24 COLOR_BLACK = {
+    0, 0, 0 };
+
 // Presence States
 #define ACTIVE_STATE 0
 #define PRESENT_STATE 1
@@ -18,19 +33,6 @@ const char* files[3]={"ACTIVE.GIF", "PRES.GIF", "IDLE.GIF"};
 // Presence State Pins (we don't need an idle state pin)
 const int activeStatePin = 13;
 const int presentStatePin = 14;
-
-// Animation Speed: range 1-10
-const int defaultSpeed = 5;
-const int minSpeed = 1;
-const int maxSpeed = 10; 
-
-// Brightness: range 0-255
-const int defaultBrightness = 50;             // Initial Brightness at power-up
-const int minBrightness = 10;                 // Minimum brightness value for use with brightness buttons
-const int maxBrightness = 200;                // Maximum brightness value for use with brightness buttons
-
-const rgb24 COLOR_BLACK = {
-    0, 0, 0 };
 
 const int defaultState = IDLE_STATE;          // Set the default state for the the initial run
 int speed = defaultSpeed;                     // Set the default brightness for the initial run
