@@ -8,7 +8,7 @@
 #include "GIFDecoder.h"
 
 // The filenames for the animation associated with each state
-const char* files[3]={"ACTIVE.GIF", "PRES.GIF", "IDLE.GIF"};
+const char* files[3]={"ACTIVE.GIF", "PRES.GIF", "TRIP.GIF"};
 
 // Animation Speed: range 1-10
 // Do not modify the MIN and MAX
@@ -22,17 +22,17 @@ const int defaultBrightness = 50;             // Initial Brightness at power-up
 const int minBrightness = 10;                 // Minimum brightness value for use with brightness buttons
 const int maxBrightness = 200;                // Maximum brightness value for use with brightness buttons
 
-const rgb24 COLOR_BLACK = {
-    0, 0, 0 };
+const rgb24 COLOR_BLACK = { 0, 0, 0 };
 
 // Presence States
 #define ACTIVE_STATE 0
 #define PRESENT_STATE 1
-#define IDLE_STATE 2
+#define IDLE_STATE 3
+#define TRIPPED_STATE 2
 
 // Presence State Pins (we don't need an idle state pin)
 const int activeStatePin = 13;
-const int presentStatePin = 14;
+const int presentStatePin = 15;
 
 const int defaultState = IDLE_STATE;          // Set the default state for the the initial run
 int speed = defaultSpeed;                     // Set the default brightness for the initial run
@@ -89,7 +89,7 @@ void setup() {
     setUpdateScreenCallback(updateScreenCallback);
     setDrawPixelCallback(drawPixelCallback);
 
-    Serial.begin(115200);
+    Serial.begin(9600);
 
     // Initialize matrix
     strip.begin();
@@ -186,24 +186,35 @@ void loop() {
       int index = getState();
       int state = index;
       
-        // Can clear screen for new animation here, but this causes the animation to end prematurely
-        // screenClearCallback();
-       
-        getGIFFilename(GIF_DIRECTORY, files[index], pathname);
-        Serial.println(files[index]);
+      if (state == IDLE_STATE) {
+        return;
+      }
+      Serial.println(state);
+      // Can clear screen for new animation here, but this causes the animation to end prematurely
+      // screenClearCallback();
+     
+      getGIFFilename(GIF_DIRECTORY, files[index], pathname);
+      Serial.println(files[index]);
 
-        while (index == state) {
-            processGIFFile(pathname, currentSpeed);
-            state = getState();
-        }
+      while (index == state) {
+        processGIFFile(pathname, currentSpeed);
+        state = getState();
+      }
     }
 }
 
 int getState() {
-  int active = digitalRead(activeStatePin) == HIGH;
-  int present = digitalRead(presentStatePin) == HIGH;
-  if (!active && !present) {
+  bool present = analogRead(presentStatePin) > 500;
+  bool active = digitalRead(activeStatePin) == HIGH;
+  bool trigger = active && present;
+  
+  if (!active && analogRead(presentStatePin) < 500) {
     return IDLE_STATE;
   }
+
+  if (active && analogRead(presentStatePin) > 500) {
+    return TRIPPED_STATE;
+  }
+
   return active ? ACTIVE_STATE : PRESENT_STATE;
 }
