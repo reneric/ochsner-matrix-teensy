@@ -32,7 +32,7 @@ const rgb24 COLOR_BLACK = { 0, 0, 0 };
 
 // Presence State Pins (we don't need an idle state pin)
 const int activeStatePin = 13;
-const int presentStatePin = 15;
+const int presentStatePin = 14;
 
 const int defaultState = IDLE_STATE;          // Set the default state for the the initial run
 int speed = defaultSpeed;                     // Set the default brightness for the initial run
